@@ -1,7 +1,8 @@
 import json
 import logging
 import utils
-import subprocess
+from subprocess import Popen, PIPE, STDOUT
+
 
 async def send_async_request(url, user, password):
     response_json_list = []
@@ -22,15 +23,22 @@ async def send_async_request(url, user, password):
         logging.info(response)
         return result
 
-def run_command(cmd, cmd_arg):
+
+def run_command(ajax_handler, cmd, cmd_arg):
     try:
-        response = subprocess.run([cmd, cmd_arg], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        result = {'action': 'collect', 'status': 'completed', 'body': response.stdout.decode('utf-8')}
+        cmd_process = Popen([cmd, cmd_arg], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+        stdout_text = ""
+        for line in cmd_process.stdout:
+            logging.info(line.decode('utf-8'))
+            stdout_text += line.decode('utf-8')
+            ajax_handler.send_message_open_ws(line.decode('utf-8'))
+        result = {'action': 'collect', 'status': 'completed', 'body': 'Successfully executed command on the server.'}
         return result
     except Exception as err:
         result = {'action': 'collect', 'status': 'failed', 'body': err.strerror}
         logging.info(err)
         return result
+
 
 def get_response():
     with open("jsongets/response.json", 'r', ) as f:

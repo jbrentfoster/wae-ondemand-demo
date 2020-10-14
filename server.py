@@ -60,7 +60,8 @@ class AjaxHandler(tornado.web.RequestHandler):
             self.write(json.dumps(response))
         elif action == 'submit-ondemand':
             command = "/home/gibson/runcollector.sh"
-            response = methods.run_command(command, request['state-name'])
+            command = "ipconfig"
+            response = methods.run_command(self, command, request['state-name'])
             self.write(json.dumps(response))
         else:
             logging.warning("Received request for unknown operation!")
