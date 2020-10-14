@@ -28,7 +28,6 @@ def run_command(ajax_handler, cmd, cmd_arg):
     try:
         cmd_process = Popen([cmd, cmd_arg], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         stdout_text = ""
-        ajax_handler.send_message_open_ws("Executing collection script...")
         i = 0
         for line in cmd_process.stdout:
             i += 1

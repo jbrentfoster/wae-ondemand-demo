@@ -61,6 +61,7 @@ class AjaxHandler(tornado.web.RequestHandler):
         elif action == 'submit-ondemand':
             command = "/home/gibson/runcollector.sh"
             # command = "ipconfig"
+            self.send_message_open_ws("Executing collection script...")
             response = methods.run_command(self, command, request['state-name'])
             self.write(json.dumps(response))
         else:
