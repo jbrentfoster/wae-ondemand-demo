@@ -28,10 +28,14 @@ def run_command(ajax_handler, cmd, cmd_arg):
     try:
         cmd_process = Popen([cmd, cmd_arg], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         stdout_text = ""
+        ajax_handler.send_message_open_ws("Executing collection script...")
+        i = 0
         for line in cmd_process.stdout:
+            i += 1
             logging.info(line.decode('utf-8'))
             stdout_text += line.decode('utf-8')
-            ajax_handler.send_message_open_ws(line.decode('utf-8'))
+            if i%10 == 0:
+                ajax_handler.send_message_open_ws("script progressing...")
         result = {'action': 'collect', 'status': 'completed', 'body': 'Successfully executed command on the server.'}
         return result
     except Exception as err:
