@@ -35,7 +35,7 @@ def run_command(ajax_handler, cmd, cmd_arg):
             logging.info(line.decode('utf-8'))
             stdout_text += line.decode('utf-8')
             if i%10 == 0:
-                ajax_handler.send_message_open_ws("script progressing...")
+                ajax_handler.send_message_open_ws("script progressing" + "."*i)
         result = {'action': 'collect', 'status': 'completed', 'body': 'Successfully executed command on the server.'}
         return result
     except Exception as err:
