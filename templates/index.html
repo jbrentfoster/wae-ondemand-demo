@@ -1,0 +1,46 @@
+{% extends "base_template.html" %}
+{% block content %}
+<h1>WAE On-Demand Collection Demo</h1>
+<p>Simple web client for initiating a WAE collection on-demand.  The resulting plan file can be retrieved with the WAE Design client.</p>
+
+<div class="alert alert-danger alert-dismissible collapse" role="alert" id="failed">
+    <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
+    <strong>Failed!</strong> The request to the server failed. Try again.
+</div>
+<div class="alert alert-success alert-dismissible collapse" role="alert" id="completed">
+    <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
+    <strong>Sucess</strong> The request to the server completed successfully.
+</div>
+
+<form id="submit-ondemand-form">
+    <div><input type="hidden" name="action" value="submit-ondemand"></div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <select class="form-control" name="state-name" id="state">
+                {% for state in states %}
+                {% block state %}
+                <option>{{ escape(state) }}</option>
+                {% end %}
+                {% end %}
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <button type="submit" class="btn btn-success" style="width: 75%" id="ondemand-btn">
+                Collect MPLS
+            </button>
+        </div>
+    </div>
+</form>
+
+<h3>Collection Progress</h3>
+<div class="card">
+    <div class="card-body" id="textfield" style="min-height: 200px;max-height: 200px;overflow-y: scroll;">
+        <pre class="card-text" id="updatefield"></pre>
+    </div>
+</div>
+<script type="text/javascript">
+    client.connect({{port}});
+</script>
+{% end %}
+
+
